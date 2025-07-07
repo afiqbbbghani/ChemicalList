@@ -83,6 +83,7 @@
       flex: 1 1 auto;
       min-width: 300px;
       max-width: 600px;
+      height: 100%;
     }
 
     .search-wrapper input[type="text"] {
@@ -93,6 +94,8 @@
       border-radius: 8px;
       background-color: var(--card);
       color: var(--text);
+      height: 44px;
+      box-sizing: border-box;
     }
 
     .search-wrapper .fa-search {
@@ -113,6 +116,7 @@
       font-size: 1rem;
       cursor: pointer;
       transition: background-color 0.2s;
+      height: 44px;
     }
 
     button:hover {
@@ -174,11 +178,21 @@
       .search-wrapper input[type="text"] {
         padding: 0.5rem 0.75rem 0.5rem 2rem;
         font-size: 0.95rem;
+        height: auto;
       }
 
       button {
         padding: 0.5rem 0.75rem;
         font-size: 0.95rem;
+        height: auto;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.9rem;
+        color: var(--text);
+        opacity: 0.6;
       }
     }
   </style>

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ESL Lab Chemical and Inventory List</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVhYZiYxuTP7txqgQkR5fx7aX2WSjv7i1bo3KzM4t7m1yk9i7pUOPg4bXqvBgjyz9iKvUprZzWj5R0kXUFl5XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     :root {
       --bg: #f8f9fb;
@@ -86,12 +87,26 @@
       margin-bottom: 20px;
     }
 
-    input[type="text"] {
-      padding: 10px 12px;
+    .search-wrapper {
+      position: relative;
+      flex: 1 1 300px;
+    }
+
+    .search-wrapper input[type="text"] {
+      width: 100%;
+      padding: 10px 12px 10px 36px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
-      flex: 1 1 300px;
+    }
+
+    .search-wrapper .fa-search {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      font-size: 16px;
     }
 
     button {
@@ -132,8 +147,8 @@
       h1 { font-size: 1.5rem; }
       .controls, .logout { flex-direction: column; align-items: stretch; }
 
-      input[type="text"] {
-        padding: 6px 10px;
+      .search-wrapper input[type="text"] {
+        padding: 6px 10px 6px 32px;
         font-size: 14px;
       }
 
@@ -158,7 +173,7 @@
 
     <div class="tabs">
       <button class="active" onclick="switchTab('chemical')">Chemicals</button>
-      <button onclick="switchTab('inventory')">Consumables & Inventory</button>
+      <button onclick="switchTab('inventory')">Consumables & Materials</button>
     </div>
 
     <div id="chemicalTab">

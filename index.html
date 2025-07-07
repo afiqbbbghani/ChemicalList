@@ -43,7 +43,7 @@
 
       // Create header row
       const header = table.insertRow();
-      Object.keys(data[0]).forEach(key => {
+      Object.keys(data[1]).forEach(key => {
         const th = document.createElement("th");
         th.textContent = key;
         header.appendChild(th);

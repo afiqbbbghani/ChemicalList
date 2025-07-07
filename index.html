@@ -120,6 +120,34 @@
         flex: 1 1 100%;
       }
     }
+
+    /* Sticky swipe hint for mobile */
+    .mobile-swipe-footer {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-swipe-footer {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        text-align: center;
+        font-size: 14px;
+        z-index: 1000;
+        animation: fadeHint 2s ease-in-out infinite;
+        pointer-events: none;
+      }
+    }
+
+    @keyframes fadeHint {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -134,6 +162,9 @@
   <div class="table-container" id="tableContainer">
     <table id="dataTable"></table>
   </div>
+
+  <!-- Sticky mobile swipe hint -->
+  <div class="mobile-swipe-footer">↔ Swipe left/right to view more ↔</div>
 
   <script>
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";

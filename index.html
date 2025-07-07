@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Google Sheets Data Viewer</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { margin-bottom: 10px; width: 300px; padding: 5px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background-color: #f4f4f4; }
+  </style>
+</head>
+<body>
+
+  <h1>Google Sheets Data Viewer</h1>
+  <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterData()" />
+  <table id="dataTable"></table>
+
+  <script>
+    const sheetID = "YOUR_SHEET_ID"; // Replace with your actual Sheet ID
+    const sheetName = "Sheet1"; // Replace with your sheet name
+    const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+
+    let allData = [];
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        allData = data;
+        displayData(data);
+      });
+
+    function displayData(data) {
+      const table = document.getElementById("dataTable");
+      table.innerHTML = "";
+
+      if (data.length === 0) {
+        table.innerHTML = "<tr><td>No data found</td></tr>";
+        return;
+      }
+
+      // Create header row
+      const header = table.insertRow();
+      Object.keys(data[0]).forEach(key => {
+        const th = document.createElement("th");
+        th.textContent = key;
+        header.appendChild(th);
+      });
+
+      // Create data rows
+      data.forEach(row => {
+        const tr = table.insertRow();
+        Object.values(row).forEach(value => {
+          const td = tr.insertCell();
+          td.textContent = value;
+        });
+      });
+    }
+
+    function filterData() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = allData.filter(row =>
+        Object.values(row).some(val => val.toLowerCase().includes(input))
+      );
+      displayData(filtered);
+    }
+  </script>
+
+</body>
+</html>

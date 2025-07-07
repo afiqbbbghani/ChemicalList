@@ -6,20 +6,41 @@
   <title>ESL LAB Chemical List</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #f8f9fb;
+      --text: #333;
+      --card: white;
+      --accent: #3498db;
+      --accent-dark: #2980b9;
+      --header: #ecf0f1;
+      --border: #f0f0f0;
+    }
+
+    body.dark {
+      --bg: #1e1e1e;
+      --text: #ddd;
+      --card: #2b2b2b;
+      --accent: #2980b9;
+      --accent-dark: #1f5d82;
+      --header: #333;
+      --border: #444;
+    }
+
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f8f9fb;
-      color: #333;
+      background-color: var(--bg);
+      color: var(--text);
       padding: 20px;
       max-width: 1200px;
       margin: auto;
+      transition: all 0.3s ease;
     }
 
     h1 {
       text-align: center;
       font-size: 2rem;
-      margin-bottom: 30px;
-      color: #2c3e50;
+      margin-bottom: 20px;
+      color: var(--text);
     }
 
     .controls {
@@ -41,7 +62,7 @@
 
     button {
       padding: 10px 16px;
-      background-color: #3498db;
+      background-color: var(--accent);
       border: none;
       color: white;
       font-size: 16px;
@@ -52,14 +73,34 @@
     }
 
     button:hover {
-      background-color: #2980b9;
+      background-color: var(--accent-dark);
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      font-size: 14px;
+      background: none;
+      border: 2px solid var(--accent);
+      border-radius: 6px;
+      padding: 6px 10px;
+      color: var(--accent);
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--accent);
+      color: white;
     }
 
     .table-container {
       overflow-x: auto;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      background-color: white;
+      background-color: var(--card);
+      position: relative;
     }
 
     table {
@@ -71,16 +112,29 @@
     th, td {
       text-align: left;
       padding: 12px 15px;
-      border-bottom: 1px solid #f0f0f0;
+      border-bottom: 1px solid var(--border);
     }
 
     th {
-      background-color: #ecf0f1;
+      background-color: var(--header);
       font-weight: 600;
     }
 
     tr:hover {
-      background-color: #f9f9f9;
+      background-color: rgba(52, 152, 219, 0.1);
+    }
+
+    .swipe-hint {
+      font-size: 13px;
+      text-align: center;
+      margin-top: 6px;
+      color: #888;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
     }
 
     @media (max-width: 600px) {
@@ -96,10 +150,16 @@
       input[type="text"], button {
         flex: 1 1 100%;
       }
+
+      .swipe-hint {
+        margin-bottom: 15px;
+      }
     }
   </style>
 </head>
 <body>
+
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
 
   <h1>ESL LAB Chemical List</h1>
 
@@ -111,12 +171,13 @@
   <div class="table-container">
     <table id="dataTable"></table>
   </div>
+  <div class="swipe-hint">↔ Swipe left/right to view more ↔</div>
 
   <script>
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";
     const sheetName = "Chemical";
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
-    const visibleColumns = [ "Label", "Chemical Name", "Room", "Location", "Container", "Brand" ];
+    const visibleColumns = ["Label", "Chemical Name", "Room", "Location", "Container", "Brand"];
     let allData = [];
 
     fetch(url)
@@ -170,6 +231,10 @@
     function showAll() {
       document.getElementById("searchInput").value = "";
       displayData(allData);
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
     }
   </script>
 

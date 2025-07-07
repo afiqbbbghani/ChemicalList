@@ -19,17 +19,27 @@
   <table id="dataTable"></table>
 
   <script>
-    const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs"; // Replace with your actual Sheet ID
-    const sheetName = "ChemicalLIST"; // Replace with your sheet name
+    const sheetID = "YOUR_SHEET_ID"; // Replace with your actual Google Sheet ID
+    const sheetName = "Sheet1"; // Replace with your sheet name
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
 
+    const visibleColumns = ["A", "B", "C", "D", "G", "H", "I", "J", "K"]; // Desired columns
     let allData = [];
 
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        allData = data;
-        displayData(data);
+        // Skip row 1 (assumed to be headers), keep from row 2 onward
+        allData = data.slice(1).map(row => {
+          let filtered = {};
+          for (const key of Object.keys(row)) {
+            if (visibleColumns.includes(key)) {
+              filtered[key] = row[key];
+            }
+          }
+          return filtered;
+        });
+        displayData(allData);
       });
 
     function displayData(data) {
@@ -41,20 +51,20 @@
         return;
       }
 
-      // Create header row
+      // Header row
       const header = table.insertRow();
-      Object.keys(data[1]).forEach(key => {
+      Object.keys(data[0]).forEach(key => {
         const th = document.createElement("th");
         th.textContent = key;
         header.appendChild(th);
       });
 
-      // Create data rows
+      // Data rows
       data.forEach(row => {
         const tr = table.insertRow();
-        Object.values(row).forEach(value => {
+        Object.values(row).forEach(val => {
           const td = tr.insertCell();
-          td.textContent = value;
+          td.textContent = val;
         });
       });
     }

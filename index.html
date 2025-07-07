@@ -199,7 +199,6 @@
     <div class="controls">
       <input type="text" id="searchInput" placeholder="Search chemicals..." onkeyup="filterData()" />
       <button onclick="showAll()">Show All</button>
-      <button onclick="logout()">Log Out</button>
     </div>
 
     <div class="table-container" id="tableContainer">
@@ -207,10 +206,17 @@
     </div>
 
     <div class="mobile-swipe-footer">↔ Swipe left/right to view more ↔</div>
+
+    <!-- Logout at bottom -->
+    <div style="text-align: center; margin-top: 40px;">
+      <button onclick="logout()" style="padding: 10px 20px; background-color: var(--accent); border: none; color: white; font-size: 16px; border-radius: 8px; cursor: pointer;">
+        Log Out
+      </button>
+    </div>
   </div>
 
   <script>
-    const ACCESS_KEY = "vlsimems"; // Change this to your custom password
+    const ACCESS_KEY = "esl123";
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";
     const sheetName = "Chemical";
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
@@ -235,7 +241,7 @@
 
     function logout() {
       localStorage.removeItem("esl_access");
-      location.reload(); // Reset the page
+      location.reload();
     }
 
     function loadData() {

@@ -16,14 +16,16 @@
       --border: #f0f0f0;
     }
 
-    body.dark {
-      --bg: #1e1e1e;
-      --text: #ddd;
-      --card: #2b2b2b;
-      --accent: #2980b9;
-      --accent-dark: #1f5d82;
-      --header: #333;
-      --border: #444;
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1e1e1e;
+        --text: #ddd;
+        --card: #2b2b2b;
+        --accent: #2980b9;
+        --accent-dark: #1f5d82;
+        --header: #333;
+        --border: #444;
+      }
     }
 
     body {
@@ -76,25 +78,6 @@
       background-color: var(--accent-dark);
     }
 
-    .theme-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 14px;
-      background: none;
-      border: 2px solid var(--accent);
-      border-radius: 6px;
-      padding: 6px 10px;
-      color: var(--accent);
-      transition: all 0.3s ease;
-    }
-
-    .theme-toggle:hover {
-      background-color: var(--accent);
-      color: white;
-    }
-
     .table-container {
       overflow-x: auto;
       border-radius: 10px;
@@ -130,6 +113,7 @@
       margin-top: 6px;
       color: #888;
       animation: pulse 2s infinite;
+      transition: opacity 0.5s ease;
     }
 
     @keyframes pulse {
@@ -159,8 +143,6 @@
 </head>
 <body>
 
-  <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
-
   <h1>ESL LAB Chemical List</h1>
 
   <div class="controls">
@@ -168,10 +150,10 @@
     <button onclick="showAll()">Show All</button>
   </div>
 
-  <div class="table-container">
+  <div class="table-container" id="tableContainer">
     <table id="dataTable"></table>
   </div>
-  <div class="swipe-hint">↔ Swipe left/right to view more ↔</div>
+  <div class="swipe-hint" id="swipeHint">↔ Swipe left/right to view more ↔</div>
 
   <script>
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";
@@ -202,7 +184,6 @@
         return;
       }
 
-      // Header
       const header = table.insertRow();
       Object.keys(data[0]).forEach(key => {
         const th = document.createElement("th");
@@ -210,7 +191,6 @@
         header.appendChild(th);
       });
 
-      // Rows
       data.forEach(row => {
         const tr = table.insertRow();
         Object.values(row).forEach(val => {
@@ -218,6 +198,8 @@
           td.textContent = val;
         });
       });
+
+      updateSwipeHint();
     }
 
     function filterData() {
@@ -233,9 +215,23 @@
       displayData(allData);
     }
 
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
+    // Swipe hint visibility logic
+    function updateSwipeHint() {
+      const container = document.getElementById("tableContainer");
+      const hint = document.getElementById("swipeHint");
+      if (container.scrollWidth > container.clientWidth) {
+        hint.style.display = "block";
+        hint.style.opacity = "1";
+      } else {
+        hint.style.display = "none";
+      }
     }
+
+    document.getElementById("tableContainer").addEventListener("scroll", () => {
+      const hint = document.getElementById("swipeHint");
+      hint.style.opacity = "0";
+      setTimeout(() => hint.style.display = "none", 800);
+    });
   </script>
 
 </body>

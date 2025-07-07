@@ -10,35 +10,33 @@
       font-family: 'Inter', sans-serif;
       background-color: #f8f9fb;
       color: #333;
-      padding: 40px;
+      padding: 20px;
       max-width: 1200px;
       margin: auto;
     }
 
     h1 {
       text-align: center;
-      font-size: 2em;
+      font-size: 2rem;
       margin-bottom: 30px;
       color: #2c3e50;
     }
 
     .controls {
-      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
       margin-bottom: 20px;
     }
 
     input[type="text"] {
-      width: 300px;
       padding: 10px 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
-      transition: border 0.3s;
-    }
-
-    input[type="text"]:focus {
-      border-color: #3498db;
-      outline: none;
+      flex: 1 1 300px;
+      max-width: 100%;
     }
 
     button {
@@ -49,21 +47,25 @@
       font-size: 16px;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s;
+      flex: 1 1 120px;
+      max-width: 100%;
     }
 
     button:hover {
       background-color: #2980b9;
     }
 
+    .table-container {
+      overflow-x: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      background-color: white;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-      background-color: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      min-width: 600px;
     }
 
     th, td {
@@ -81,14 +83,18 @@
       background-color: #f9f9f9;
     }
 
-    @media (max-width: 768px) {
-      input[type="text"] {
-        width: 100%;
-        margin-bottom: 10px;
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
       }
 
-      button {
-        width: 100%;
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      input[type="text"], button {
+        flex: 1 1 100%;
       }
     }
   </style>
@@ -102,7 +108,9 @@
     <button onclick="showAll()">Show All</button>
   </div>
 
-  <table id="dataTable"></table>
+  <div class="table-container">
+    <table id="dataTable"></table>
+  </div>
 
   <script>
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";

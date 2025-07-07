@@ -36,7 +36,7 @@
       background-color: var(--bg);
       color: var(--text);
       margin: 0;
-      padding: 2rem;
+      padding: 2rem 1rem;
       max-width: 1200px;
       margin-inline: auto;
     }
@@ -73,7 +73,7 @@
 
     .controls {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       flex-wrap: wrap;
       gap: 0.75rem;
       margin-bottom: 1rem;
@@ -81,8 +81,8 @@
 
     .search-wrapper {
       position: relative;
-      flex: 2;
-      height: 100%;
+      flex-grow: 1;
+      min-width: 240px;
     }
 
     .search-wrapper input[type="text"] {
@@ -116,6 +116,7 @@
       cursor: pointer;
       transition: background-color 0.2s;
       height: 44px;
+      box-sizing: border-box;
     }
 
     button:hover {
@@ -160,6 +161,14 @@
       display: none;
     }
 
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      opacity: 0.6;
+      display: none;
+    }
+
     @media (max-width: 600px) {
       h1 {
         font-size: 1.5rem;
@@ -170,38 +179,17 @@
         align-items: stretch;
       }
 
-      .search-wrapper {
-        max-width: 100%;
-      }
-
-      .search-wrapper input[type="text"] {
-        padding: 0.5rem 0.75rem 0.5rem 2rem;
-        font-size: 0.95rem;
-        height: auto;
-      }
-
+      .search-wrapper,
       button {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.95rem;
-        height: auto;
+        width: 100%;
       }
 
       footer {
-        text-align: center;
-        margin-top: 1.5rem;
-        font-size: 0.9rem;
-        color: var(--text);
-        opacity: 0.6;
+        display: block;
       }
     }
   </style>
 </head>
-<body>
-  <!-- body content remains unchanged -->
-  <footer>Swipe ← or → for more info</footer>
-</body>
-</html>
-
 <body>
   <div id="authScreen" class="auth-screen">
     <h2>Enter Access Key</h2>
@@ -221,7 +209,10 @@
 
     <div id="chemicalTab">
       <div class="controls">
-        <input type="text" id="searchChemical" placeholder="Search chemicals..." onkeyup="filterData('chemical')" />
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchChemical" placeholder="Search chemicals..." onkeyup="filterData('chemical')" />
+        </div>
         <button onclick="showAll('chemical')">Show All</button>
       </div>
       <div class="table-container">
@@ -231,7 +222,10 @@
 
     <div id="inventoryTab" class="hidden">
       <div class="controls">
-        <input type="text" id="searchInventory" placeholder="Search inventory..." onkeyup="filterData('inventory')" />
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInventory" placeholder="Search inventory..." onkeyup="filterData('inventory')" />
+        </div>
         <button onclick="showAll('inventory')">Show All</button>
       </div>
       <div class="table-container">
@@ -243,6 +237,8 @@
       <button onclick="logout()">Log Out</button>
     </div>
   </div>
+
+  <footer>Swipe ← or → for more info</footer>
 
   <script>
     const ACCESS_KEY = "vlsimems";

@@ -3,10 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chemical List</title>
+  <title>ESL LAB CHEMICAL LIST</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
-    input { margin-bottom: 10px; width: 300px; padding: 5px; }
+    input, button { margin-bottom: 10px; padding: 5px; }
+    input { width: 300px; }
+    button { margin-left: 10px; cursor: pointer; }
     table { border-collapse: collapse; width: 100%; margin-top: 10px; }
     th, td { border: 1px solid #ddd; padding: 8px; }
     th { background-color: #f4f4f4; }
@@ -14,22 +16,24 @@
 </head>
 <body>
 
-  <h1>Chemical List</h1>
+  <h1>ESL LAB CHEMICAL LIST</h1>
   <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterData()" />
+  <button onclick="showAll()">Show All</button>
+
   <table id="dataTable"></table>
 
   <script>
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs"; // Replace with your actual Google Sheet ID
-    const sheetName = "ChemicalLIST"; // Replace with your sheet name
+    const sheetName = "ChemicalLIST"; // Replace if your sheet name is different
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+    const visibleColumns = ["A", "B", "C", "D", "G", "H", "I", "J", "K"]; // Columns to show
 
-    const visibleColumns = ["A", "B", "C", "D", "G", "H", "I", "J", "K"]; // Desired columns
     let allData = [];
 
+    // Fetch and filter data
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        // Skip row 1 (assumed to be headers), keep from row 2 onward
         allData = data.slice(1).map(row => {
           let filtered = {};
           for (const key of Object.keys(row)) {
@@ -42,6 +46,7 @@
         displayData(allData);
       });
 
+    // Display data in table
     function displayData(data) {
       const table = document.getElementById("dataTable");
       table.innerHTML = "";
@@ -51,7 +56,7 @@
         return;
       }
 
-      // Header row
+      // Header
       const header = table.insertRow();
       Object.keys(data[0]).forEach(key => {
         const th = document.createElement("th");
@@ -59,7 +64,7 @@
         header.appendChild(th);
       });
 
-      // Data rows
+      // Rows
       data.forEach(row => {
         const tr = table.insertRow();
         Object.values(row).forEach(val => {
@@ -69,12 +74,19 @@
       });
     }
 
+    // Filter table based on search
     function filterData() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       const filtered = allData.filter(row =>
         Object.values(row).some(val => val.toLowerCase().includes(input))
       );
       displayData(filtered);
+    }
+
+    // Show all data again
+    function showAll() {
+      document.getElementById("searchInput").value = "";
+      displayData(allData);
     }
   </script>
 

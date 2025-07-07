@@ -38,6 +38,38 @@
       transition: all 0.3s ease;
     }
 
+    .hidden {
+      display: none;
+    }
+
+    .auth-screen {
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    .auth-screen input {
+      padding: 10px 16px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      width: 250px;
+    }
+
+    .auth-screen button {
+      padding: 10px 16px;
+      background-color: var(--accent);
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .auth-screen button:hover {
+      background-color: var(--accent-dark);
+    }
+
     h1 {
       text-align: center;
       font-size: 2rem;
@@ -121,7 +153,6 @@
       }
     }
 
-    /* Sticky swipe hint for mobile */
     .mobile-swipe-footer {
       display: none;
     }
@@ -152,39 +183,75 @@
 </head>
 <body>
 
-  <h1>ESL LAB Chemical List</h1>
-
-  <div class="controls">
-    <input type="text" id="searchInput" placeholder="Search chemicals..." onkeyup="filterData()" />
-    <button onclick="showAll()">Show All</button>
+  <!-- Password Screen -->
+  <div id="authScreen" class="auth-screen">
+    <h2>Enter Access Key</h2>
+    <input type="password" id="keyInput" placeholder="Enter key..." />
+    <br />
+    <button onclick="checkKey()">Access</button>
+    <p id="errorMessage" style="color: red; display: none;">Incorrect key. Try again.</p>
   </div>
 
-  <div class="table-container" id="tableContainer">
-    <table id="dataTable"></table>
-  </div>
+  <!-- Main App Content (Hidden until login) -->
+  <div id="appContent" class="hidden">
+    <h1>ESL LAB Chemical List</h1>
 
-  <!-- Sticky mobile swipe hint -->
-  <div class="mobile-swipe-footer">↔ Swipe left/right to view more ↔</div>
+    <div class="controls">
+      <input type="text" id="searchInput" placeholder="Search chemicals..." onkeyup="filterData()" />
+      <button onclick="showAll()">Show All</button>
+      <button onclick="logout()">Log Out</button>
+    </div>
+
+    <div class="table-container" id="tableContainer">
+      <table id="dataTable"></table>
+    </div>
+
+    <div class="mobile-swipe-footer">↔ Swipe left/right to view more ↔</div>
+  </div>
 
   <script>
+    const ACCESS_KEY = "vlsimems"; // Change this to your custom password
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";
     const sheetName = "Chemical";
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
     const visibleColumns = ["Label", "Chemical Name", "Room", "Location", "Container", "Brand"];
     let allData = [];
 
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        allData = data.slice(1, 300).map(row => {
-          let filtered = {};
-          for (const key of visibleColumns) {
-            filtered[key] = row[key] || "";
-          }
-          return filtered;
+    function checkKey() {
+      const input = document.getElementById("keyInput").value;
+      if (input === ACCESS_KEY) {
+        localStorage.setItem("esl_access", "granted");
+        showApp();
+      } else {
+        document.getElementById("errorMessage").style.display = "block";
+      }
+    }
+
+    function showApp() {
+      document.getElementById("authScreen").style.display = "none";
+      document.getElementById("appContent").classList.remove("hidden");
+      loadData();
+    }
+
+    function logout() {
+      localStorage.removeItem("esl_access");
+      location.reload(); // Reset the page
+    }
+
+    function loadData() {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          allData = data.slice(1, 300).map(row => {
+            let filtered = {};
+            for (const key of visibleColumns) {
+              filtered[key] = row[key] || "";
+            }
+            return filtered;
+          });
+          displayData(allData);
         });
-        displayData(allData);
-      });
+    }
 
     function displayData(data) {
       const table = document.getElementById("dataTable");
@@ -222,6 +289,11 @@
     function showAll() {
       document.getElementById("searchInput").value = "";
       displayData(allData);
+    }
+
+    // Auto-login if previously granted
+    if (localStorage.getItem("esl_access") === "granted") {
+      showApp();
     }
   </script>
 

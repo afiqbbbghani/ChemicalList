@@ -4,21 +4,103 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ESL LAB Chemical List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input, button { margin-bottom: 10px; padding: 5px; }
-    input { width: 300px; }
-    button { margin-left: 10px; cursor: pointer; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ddd; padding: 8px; }
-    th { background-color: #f4f4f4; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8f9fb;
+      color: #333;
+      padding: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 300px;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #3498db;
+      outline: none;
+    }
+
+    button {
+      padding: 10px 16px;
+      background-color: #3498db;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 15px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    th {
+      background-color: #ecf0f1;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    @media (max-width: 768px) {
+      input[type="text"] {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
 
   <h1>ESL LAB Chemical List</h1>
-  <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterData()" />
-  <button onclick="showAll()">Show All</button>
+
+  <div class="controls">
+    <input type="text" id="searchInput" placeholder="Search chemicals..." onkeyup="filterData()" />
+    <button onclick="showAll()">Show All</button>
+  </div>
 
   <table id="dataTable"></table>
 
@@ -26,14 +108,12 @@
     const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";
     const sheetName = "Chemical";
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
-
-    const visibleColumns = [ "Label", "Chemical Name", "Room", "Location", "Container", "Brand"];
+    const visibleColumns = [ "Label", "Chemical Name", "Room", "Location", "Container", "Brand" ];
     let allData = [];
 
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        // Get rows 2 to 300 and filter columns A–O
         allData = data.slice(1, 300).map(row => {
           let filtered = {};
           for (const key of visibleColumns) {

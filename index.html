@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ESL LAB CHEMICAL LIST</title>
+  <title>ESL LAB Chemical List</title>
   <style>
     body { font-family: Arial, sans-serif; padding: 20px; }
     input, button { margin-bottom: 10px; padding: 5px; }
@@ -16,37 +16,34 @@
 </head>
 <body>
 
-  <h1>ESL LAB CHEMICAL LIST</h1>
+  <h1>ESL LAB Chemical List</h1>
   <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterData()" />
   <button onclick="showAll()">Show All</button>
 
   <table id="dataTable"></table>
 
   <script>
-    const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs"; // Replace with your actual Google Sheet ID
-    const sheetName = "ChemicalLIST"; // Replace if your sheet name is different
+    const sheetID = "1JwekT5mXQ28rn2HJPeswtnfNsqge4beEpgyDCLI9gPs";
+    const sheetName = "ChemicalList";
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
-    const visibleColumns = ["A", "B", "C", "D", "G", "H", "I", "J", "K"]; // Columns to show
 
+    const visibleColumns = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"];
     let allData = [];
 
-    // Fetch and filter data
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        allData = data.slice(1).map(row => {
+        // Get rows 2 to 300 and filter columns A–O
+        allData = data.slice(1, 300).map(row => {
           let filtered = {};
-          for (const key of Object.keys(row)) {
-            if (visibleColumns.includes(key)) {
-              filtered[key] = row[key];
-            }
+          for (const key of visibleColumns) {
+            filtered[key] = row[key] || "";
           }
           return filtered;
         });
         displayData(allData);
       });
 
-    // Display data in table
     function displayData(data) {
       const table = document.getElementById("dataTable");
       table.innerHTML = "";
@@ -74,7 +71,6 @@
       });
     }
 
-    // Filter table based on search
     function filterData() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       const filtered = allData.filter(row =>
@@ -83,7 +79,6 @@
       displayData(filtered);
     }
 
-    // Show all data again
     function showAll() {
       document.getElementById("searchInput").value = "";
       displayData(allData);

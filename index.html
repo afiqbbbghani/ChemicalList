@@ -27,7 +27,7 @@
     const sheetName = "Chemical";
     const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
 
-    const visibleColumns = ["A", "B", "C", "D"];
+    const visibleColumns = ["A", "B", "Label", "Chemical Name"];
     let allData = [];
 
     fetch(url)
